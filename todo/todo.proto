@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package todo;  // This is the proto package, not the Go package
 
-option go_package = "github.com/ponyjackal/grpc-todo-list;todo";
+option go_package = "./todo;todo";
 
 message Todo {
     string id = 1;
