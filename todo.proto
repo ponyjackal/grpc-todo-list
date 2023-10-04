@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package todo;  // This is the proto package, not the Go package
+
+option go_package = "github.com/ponyjackal/grpc-todo-list;todo";
+
+message Todo {
+    string id = 1;
+    string title = 2;
+    bool completed = 3;
+}
+
+service TodoService {
+    rpc GetTodos (TodoRequest) returns (stream Todo);
+}
+
+message TodoRequest {
+    string user_id = 1;
+}
