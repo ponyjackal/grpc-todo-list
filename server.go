@@ -36,6 +36,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 	todo.RegisterTodoServiceServer(grpcServer, &todoServer{})
+	log.Printf("server listening at %v", lis.Addr())
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
