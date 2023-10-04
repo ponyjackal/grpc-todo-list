@@ -1,8 +1,16 @@
 package main
 
-import todo "github.com/ponyjackal/grpc-todo-list/todo"
+import (
+	"log"
+	"net"
 
-type todoServer struct{}
+	todo "github.com/ponyjackal/grpc-todo-list/todo"
+	"google.golang.org/grpc"
+)
+
+type todoServer struct {
+	todo.UnimplementedTodoServiceServer
+}
 
 func (s *todoServer) GetTodos(req *todo.TodoRequest, stream todo.TodoService_GetTodosServer) error {
 	todos := []*todo.Todo{
@@ -18,4 +26,18 @@ func (s *todoServer) GetTodos(req *todo.TodoRequest, stream todo.TodoService_Get
 	}
 
 	return nil
+}
+
+func main() {
+	lis, err := net.Listen("tcp", ":50051")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	grpcServer := grpc.NewServer()
+	todo.RegisterTodoServiceServer(grpcServer, &todoServer{})
+
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
 }
